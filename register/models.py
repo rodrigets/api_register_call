@@ -1,22 +1,33 @@
 from django.db import models
-from django.core.validators import MaxValueValidator, MinValueValidator
+import uuid
 
 CALLING_TYPE = (
-    ('Start', 'start'),
-    ('Stop', 'stop'), 
+    ('start', 'Start'),
+    ('stop', 'Stop'),
 )
 
 
 class Register(models.Model):
-    name ='register'
-    
-    call_type = models.CharField(max_length=5, choices=CALLING_TYPE)
-    time = models.DateTimeField() 
-    call_id = models.ForeignKey('register', on_delete=models.CASCADE,)
-    source = models.IntegerField(validators=[MaxValueValidator(9),
-            MinValueValidator(8)])
-    destination = models.IntegerField(validators=[MaxValueValidator(9),
-            MinValueValidator(8)])
+    name = 'register'
+
+    call_type = models.CharField(
+        max_length=5, 
+        choices=CALLING_TYPE)
+
+    call_datetime = models.DateTimeField()
+
+    source_number = models.IntegerField()
+
+    destine_number = models.IntegerField()
+
+    call_code = models.UUIDField(editable=False,
+                default=uuid.uuid1,
+                )
 
     def __str__(self):
         return self.call_type + ' - ' + str(self.source)
+
+    def get_form(self, request, obj=None, **kwargs):
+       self.exclude = ("call_code", )
+       form = super(Register, self).get_form(request, obj, **kwargs)
+       return form
