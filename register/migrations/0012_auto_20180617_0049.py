@@ -13,11 +13,11 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='register',
             name='destine_number',
-            field=models.CharField(blank=True, max_length=11, null=True),
+            field=models.CharField(max_length=11),
         ),
         migrations.AlterField(
             model_name='register',
             name='source_number',
-            field=models.CharField(blank=True, max_length=11, null=True),
+            field=models.CharField(max_length=11),
         ),
     ]
